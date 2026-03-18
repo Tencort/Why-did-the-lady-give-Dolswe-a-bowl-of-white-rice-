@@ -316,6 +316,8 @@ export default function Home() {
   const fetchTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   // 초기 fetchRecommendation 직후 mapBounds 변경으로 인한 중복 호출 방지
   const isFirstLoadRef = useRef(true)
+  // fetch가 한 번이라도 시작됐는지 — 폴백 조기 실행 방지용
+  const fetchEverStartedRef = useRef(false)
 
   // 마운트 시 더미 이력 초기화 (최초 방문 1회만 실행)
   useEffect(() => { initDummyHistoryIfNeeded() }, [])
@@ -368,8 +370,15 @@ export default function Home() {
     )
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // GPS 위치 기준 검색 결과가 비어있으면 문정·장지역 기본값으로 자동 전환
+  // fetch 시작 여부 추적 — loading이 true가 된 순간부터 기록
   useEffect(() => {
+    if (loading) fetchEverStartedRef.current = true
+  }, [loading])
+
+  // GPS 위치 기준 검색 결과가 비어있으면 문정·장지역 기본값으로 자동 전환
+  // fetchEverStartedRef가 true일 때만 실행 — GPS→fetch 사이 타이밍에 조기 실행 방지
+  useEffect(() => {
+    if (!fetchEverStartedRef.current) return
     if (loading) return
     if (state.restaurants.length > 0) return
     if (!coords) return
