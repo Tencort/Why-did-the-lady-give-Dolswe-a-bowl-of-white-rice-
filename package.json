@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.24",
+    "framer-motion": "^12.38.0",
+    "lodash": "^4.17.23",
     "next": "16.1.7",
     "react": "19.2.3",
     "react-dom": "19.2.3"

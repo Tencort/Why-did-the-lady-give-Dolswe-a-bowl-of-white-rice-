@@ -1,26 +1,43 @@
+/* Pretendard 폰트 — jsDelivr CDN */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Toss Feed 라이트 팔레트 + 블루 포인트 */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-tf-bg:          #f7f8fa;
+  --color-tf-surface:     #ffffff;
+  --color-tf-border:      #e5e8eb;
+  --color-tf-text:        #191f28;
+  --color-tf-text-sub:    #6b7684;
+  --color-tf-text-hint:   #b0b8c1;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* 포인트 블루 (Toss Feed 스타일) */
+  --color-sg-blue:        #3182f6;
+  --color-sg-blue-light:  #ebf3fe;
+  --color-sg-blue-border: #c9dffe;
+
+  /* 하위 호환 — 기존 sg-gold 참조를 블루로 대체 */
+  --color-sg-gold:        #3182f6;
+  --color-sg-gold-light:  #ebf3fe;
+
+  --color-sg-green:       #00c471;
+  --color-sg-red:         #c0392b;
+  --color-sg-danger:      #e53935;
+
+  --color-sageuk-gold:    #3182f6;
+  --color-sageuk-danger:  #e53935;
+  --color-sageuk-bg:      #f7f8fa;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f7f8fa;
+  color: #191f28;
+  min-height: 100vh;
+  font-family: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e5e8eb; border-radius: 4px; }
