@@ -68,6 +68,7 @@ function buildPinHtml(r: Restaurant, isSelected: boolean): string {
           <span class="mp-dist">도보 ${walkMin}분 · ${r.distance}m</span>
         </div>
         ${r.address ? `<div class="mp-addr">${r.address}</div>` : ''}
+        ${r.manimComment ? `<div class="mp-manim-comment">🧹 ${r.manimComment}</div>` : ''}
       </div>
     </div>
   `
@@ -147,6 +148,14 @@ function injectPinStyles() {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      max-width: 180px;
+    }
+    .mp-manim-comment {
+      font-size: 11px;
+      color: #6b7684;
+      margin-top: 4px;
+      line-height: 1.5;
+      white-space: normal;
       max-width: 180px;
     }
   `

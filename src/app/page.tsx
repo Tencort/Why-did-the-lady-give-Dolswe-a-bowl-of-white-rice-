@@ -14,8 +14,8 @@ import { LetterSwapForward } from '@/components/LetterSwap'
 import { ManimEmotion, DialogueMessage, Restaurant } from '@/types'
 import { initDummyHistoryIfNeeded, loadHistory } from '@/data/userHistory'
 
-// 문정역 기본 좌표 (GPS 미지원 또는 저장 위치 없을 때 폴백)
-const DEFAULT_LOCATION = { lat: 37.4846, lng: 127.1232, name: '문정역' }
+// 문정·장지역 중간 좌표 — GPS 미지원 또는 결과 없을 때 폴백
+const DEFAULT_LOCATION = { lat: 37.4838, lng: 127.1257, name: '문정·장지역' }
 const DEFAULT_CATEGORIES = ['한식', '중식', '일식', '양식', '분식', '카페', '치킨', '피자', '패스트푸드', '고기', '해산물', '술집', '베이커리', '아시안', '브런치', '뷔페']
 const SAVED_LOCATION_KEY = 'manim_saved_location'
 
@@ -368,6 +368,23 @@ export default function Home() {
     )
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // GPS 위치 기준 검색 결과가 비어있으면 문정·장지역 기본값으로 자동 전환
+  useEffect(() => {
+    if (loading) return
+    if (state.restaurants.length > 0) return
+    if (!coords) return
+    // 이미 기본 위치면 중복 재시도 방지
+    const isDefault =
+      Math.abs(coords.lat - DEFAULT_LOCATION.lat) < 0.001 &&
+      Math.abs(coords.lng - DEFAULT_LOCATION.lng) < 0.001
+    if (isDefault) return
+
+    const { lat, lng, name } = DEFAULT_LOCATION
+    setCoords({ lat, lng })
+    setLocationName(name)
+    fetchRecommendation(lat, lng, DEFAULT_CATEGORIES, 1, [], name)
+  }, [loading, state.restaurants.length]) // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [state.dialogues, loading])
@@ -708,7 +725,7 @@ export default function Home() {
               onClick={() => setShowModal(false)} />
             <motion.div
               className="fixed bottom-0 left-0 right-0 z-40 flex flex-col bg-white md:max-w-[480px] md:mx-auto md:bottom-6 md:rounded-3xl"
-              style={{ borderRadius: '24px 24px 0 0', maxHeight: '72vh', boxShadow: '0 -4px 40px rgba(25,31,40,0.14)' }}
+              style={{ borderRadius: '24px 24px 0 0', maxHeight: '88vh', boxShadow: '0 -4px 40px rgba(25,31,40,0.14)' }}
               initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 32, stiffness: 320 }}
             >

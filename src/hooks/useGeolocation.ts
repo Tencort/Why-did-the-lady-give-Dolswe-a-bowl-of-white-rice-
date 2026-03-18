@@ -14,8 +14,8 @@ interface GeolocationState {
   error: string | null
 }
 
-// 위치 획득 실패 시 기본값 — 서울특별시 문정역
-const DEFAULT_LOCATION = { lat: 37.4924, lng: 127.1238 }
+// 위치 획득 실패 시 기본값 — 문정·장지역 중간
+const DEFAULT_LOCATION = { lat: 37.4838, lng: 127.1257 }
 
 export function useGeolocation() {
   const [state, setState] = useState<GeolocationState>({

@@ -62,6 +62,71 @@ const REVIEW_POOL: Record<string, string[]> = {
   ],
 }
 
+// ─── 마님의 추천 포인트 풀 — 사극 말투 결정론적 코멘트 ───────────────
+const MANIM_COMMENT_POOL: Record<string, string[]> = {
+  한식: [
+    '이곳 국물 맛은 임금님 수라상에 올려도 손색없을 듯 하오이다.',
+    '밥 한 그릇으로 기운을 차리기에 이보다 나은 곳은 없사옵니다.',
+    '반찬 인심이 후하여 돌쇠도 배불리 먹을 수 있을 것이오.',
+    '된장 향이 고향 마을 부엌 냄새 같아 정겹사옵니다.',
+    '점심 특선이 마련되어 있어 주머니 사정도 걱정 없을 것이오.',
+  ],
+  중식: [
+    '짜장 소스의 깊이가 예사롭지 않사옵니다. 분명 비법이 있을 것이오.',
+    '면발의 쫄깃함이 마님 심기를 유쾌하게 하는구나.',
+    '탕수육 한 점에 세상 시름을 잊을 수 있을 것이오.',
+    '불향이 살아있어 궁중 연회에서도 통할 솜씨로소이다.',
+  ],
+  일식: [
+    '신선도가 으뜸이라 바다를 그대로 담아온 듯 하오이다.',
+    '칼솜씨가 번뜩여 장인의 경지에 이르렀음이 분명하오.',
+    '국물 한 모금에 피로가 싹 가시니 신묘한 맛이로다.',
+    '정갈한 상차림이 마님의 눈을 즐겁게 하는구나.',
+  ],
+  양식: [
+    '멀리 이국에서 건너온 맛이나 결코 낯설지 않사옵니다.',
+    '고기 굽기를 정확히 맞추니 기술이 대단하오이다.',
+    '분위기가 고아하여 귀한 손님 모시기에 적합하겠소.',
+    '크림 소스의 농도가 딱 알맞아 마님도 탐이 나는구나.',
+  ],
+  분식: [
+    '매운 것을 즐기는 돌쇠에게 안성맞춤일 것이오.',
+    '빠르고 든든하니 바쁜 점심 시간에 제격이로다.',
+    '저렴한 값에 배불리 먹을 수 있으니 현명한 선택이오.',
+    '갓 튀겨낸 바삭함이 사람의 마음을 사로잡는구나.',
+  ],
+  카페: [
+    '차 한 잔으로 지친 심신을 달래기에 더없이 좋은 곳이오.',
+    '원두 향이 진하여 마음이 절로 안정되는구나.',
+    '조용하고 아늑하여 잠시 쉬어가기에 제격이오.',
+    '달콤한 것들이 많아 마님도 모처럼 흡족하겠구나.',
+  ],
+  치킨: [
+    '바삭한 튀김옷이 손을 멈출 수 없게 만드는구나.',
+    '양념 맛이 일품이라 마님도 한 점 탐이 날 지경이오.',
+    '맥주와 함께하면 세상 부러울 게 없을 것이오.',
+  ],
+  default: [
+    '마님이 직접 맛을 보고 엄선한 곳이오이다.',
+    '이곳은 허투루 추천하는 법이 없는 마님이 인정한 곳이오.',
+    '한번 가면 발길이 자연스레 다시 향하게 되는 곳이로다.',
+    '주변에 소문이 자자하니 맛은 이미 검증되었다 할 것이오.',
+    '정성이 담긴 음식을 내어주니 고마운 곳이로다.',
+  ],
+}
+
+/** 마님 추천 코멘트 — restaurantId 해시 기반 결정론적 선택 */
+function generateManimComment(restaurantId: string, category: string): string {
+  let hash = 0
+  for (let i = 0; i < restaurantId.length; i++) {
+    hash = ((hash << 5) - hash) + restaurantId.charCodeAt(i)
+    hash |= 0
+  }
+  const h = Math.abs(hash)
+  const pool = MANIM_COMMENT_POOL[category] ?? MANIM_COMMENT_POOL.default
+  return pool[(h + 13) % pool.length]
+}
+
 const NICKNAMES = [
   '맛집탐방러', '점심왕', '직장인A', '먹스타그램', '배고픈직장인',
   '런치타임', '식도락가', '동네맛집박사', '맛집헌터', '점심고수',
@@ -226,6 +291,7 @@ export async function POST(request: NextRequest) {
         phone: item.telephone || undefined,
         naverUrl: item.link || undefined,
         reviews: generateFakeReviews(id, displayCategory),
+        manimComment: generateManimComment(id, displayCategory),
       })
     }
 

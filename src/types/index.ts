@@ -21,6 +21,7 @@ export interface Restaurant {
   phone?: string
   naverUrl?: string
   reviews?: ReviewItem[]
+  manimComment?: string  // 마님의 추천 포인트 — 사극 말투 코멘트
 }
 
 /** 추천 모드 — elimination: 소거법 질문 플로우 */
